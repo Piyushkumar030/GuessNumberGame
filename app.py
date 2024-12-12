@@ -13,7 +13,12 @@ def index():
 
     message = ""
     if request.method == "POST":
-        guess = int(request.form["guess"])
+        try:
+            guess = int(request.form["guess"])  # Try to convert the input to an integer
+        except ValueError:
+            message = "Please enter a valid integer!"  # If input is invalid, show an error message
+            return render_template("index.html", message=message)
+
         session['count'] += 1
         jackpot = session.get('jackpot')
 
@@ -30,4 +35,4 @@ def index():
     return render_template("index.html", message=message)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True)  # Flask will automatically handle the port for deployment
